@@ -60,6 +60,52 @@ main(int argc, char *argv[])
 void
 memdump(char *fmt, char *data)
 {
-  // Your code here.
-
+  while (*fmt) {
+    switch (*fmt) {
+      case 'i': {
+        int val = *(int*)data;
+        printf("%d\n", val);
+        data += 4;
+        break;
+      }
+      case 'p': {
+        char *val = *(char**)data;
+        printf("%p\n", val);
+        data += 8;
+        break;
+      }
+      case 'h': {
+        short val = *(short*)data;
+        printf("%d\n", val);
+        data += 2;
+        break;
+      }
+      case 'c': {
+        char val = *(char*)data;
+        // 如果是可打印字符就打印字符，否则打印数字
+        if (val >= 32 && val <= 126) {
+          printf("%c\n", val);
+        } else {
+          printf("0x%x\n", val);
+        }
+        data += 1;
+        break;
+      }
+      case 's': {
+        char *str = *(char**)data;
+        printf("%s\n", str);
+        data += 8;
+        break;
+      }
+      case 'S': {
+        printf("%s\n", data);
+        data += strlen(data) + 1;
+        break;
+      }
+      default:
+        printf("Unknown format character: %c\n", *fmt);
+        return;
+    }
+    fmt++;
+  }
 }
